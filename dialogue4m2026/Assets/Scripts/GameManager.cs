@@ -38,23 +38,30 @@ public class GameManager : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         bool transitionAllowed = false;
+        GameState targetState = currentState; // Default, but will be set if allowed
 
         // Validar transição baseada no estado atual
         if (currentState == GameState.Iniciando && sceneName.Equals("MenuPrincipal"))
         {
             transitionAllowed = true;
-            SetState(GameState.MenuPrincipal);
+            targetState = GameState.MenuPrincipal;
         }
         else if (currentState == GameState.MenuPrincipal && sceneName.Equals("Gameplay"))
         {
             transitionAllowed = true;
-            SetState(GameState.Gameplay);
+            targetState = GameState.Gameplay;
         }
 
         if (transitionAllowed)
         {
-            Debug.Log("Carregando cena: " + sceneName);
-            SceneManager.LoadScene(sceneName);
+            SetState(targetState);
+            string actualScene = sceneName;
+            if (sceneName == "Gameplay")
+            {
+                actualScene = "SampleScene";
+            }
+            Debug.Log("Carregando cena: " + actualScene);
+            SceneManager.LoadScene(actualScene);
         }
         else
         {
