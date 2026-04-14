@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,5 +33,32 @@ public class GameManager : MonoBehaviour
     {
         currentState = newState;
         Debug.Log("Estado atual: " + currentState);
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        bool transitionAllowed = false;
+
+        // Validar transição baseada no estado atual
+        if (currentState == GameState.Iniciando && sceneName.Equals("MenuPrincipal"))
+        {
+            transitionAllowed = true;
+            SetState(GameState.MenuPrincipal);
+        }
+        else if (currentState == GameState.MenuPrincipal && sceneName.Equals("Gameplay"))
+        {
+            transitionAllowed = true;
+            SetState(GameState.Gameplay);
+        }
+
+        if (transitionAllowed)
+        {
+            Debug.Log("Carregando cena: " + sceneName);
+            SceneManager.LoadScene(sceneName);
+        }
+        else
+        {
+            Debug.Log("Transição não permitida! Estado atual: " + currentState + " - Cena solicitada: " + sceneName);
+        }
     }
 }
