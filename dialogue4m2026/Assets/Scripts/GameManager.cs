@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -66,6 +67,33 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("Transição não permitida! Estado atual: " + currentState + " - Cena solicitada: " + sceneName);
+        }
+    }
+
+    public void StartGame()
+    {
+        LoadScene("Gameplay");
+    }
+
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #else
+        Application.Quit();
+        #endif
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Atualiza o estado com base na cena carregada
+        if (scene.name == "MenuPrincipal")
+        {
+            SetState(GameState.MenuPrincipal);
+        }
+        else if (scene.name == "SampleScene")
+        {
+            SetState(GameState.Gameplay);
         }
     }
 }
