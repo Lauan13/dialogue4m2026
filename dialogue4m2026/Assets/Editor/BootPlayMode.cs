@@ -152,7 +152,7 @@ internal static class BootPlayMode
             }
         }
 
-        if (!unloadedAny)
+        if (!unloadedAny && !string.Equals(savedBootPath, pendingOriginalPath, System.StringComparison.OrdinalIgnoreCase))
             Debug.LogWarning("BootPlayMode: did not find any loaded scene matching _Boot to unload.");
 
         pendingOriginalPath = null;
@@ -196,7 +196,7 @@ internal static class BootPlayMode
             }
         }
 
-        if (!unloadedAny)
+        if (!unloadedAny && !string.Equals(savedBootPath, pendingOriginalPath, System.StringComparison.OrdinalIgnoreCase))
             Debug.LogWarning("BootPlayMode: (deferred) did not find any loaded scene matching _Boot to unload.");
 
         pendingOriginalPath = null;
@@ -223,7 +223,6 @@ internal static class BootPlayMode
                 if (AssetDatabase.LoadAssetAtPath<SceneAsset>(originalPath) != null || File.Exists(Path.GetFullPath(originalPath)))
                 {
                     EditorSceneManager.OpenScene(originalPath, OpenSceneMode.Single);
-                    Debug.Log($"BootPlayMode: restored editor scene '{originalPath}' after Stop.");
                 }
                 else
                 {
@@ -250,6 +249,11 @@ internal static class BootPlayMode
         return null;
     }
 }
+
+
+
+
+
 
 
 
