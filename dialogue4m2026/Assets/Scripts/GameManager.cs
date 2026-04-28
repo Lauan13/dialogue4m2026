@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         Gameplay
     }
 
-    private GameState currentState;
+    private GameState currentState = GameState.Iniciando;
 
     public void SetState(GameState newState)
     {
@@ -39,17 +39,21 @@ public class GameManager : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         bool transitionAllowed = false;
-        GameState targetState = currentState; // Default, but will be set if allowed
+        GameState targetState = currentState;
 
-        // Validar transição baseada no estado atual
-        if (currentState == GameState.Iniciando && sceneName.Equals("MenuPrincipal"))
+        if (sceneName.Equals("MenuPrincipal"))
         {
             transitionAllowed = true;
             targetState = GameState.MenuPrincipal;
         }
-        else if (currentState == GameState.MenuPrincipal && sceneName.Equals("Gameplay"))
+        else if (sceneName.Equals("Gameplay"))
         {
-            transitionAllowed = true;
+            transitionAllowed = (currentState == GameState.MenuPrincipal || currentState == GameState.Gameplay);
+            targetState = GameState.Gameplay;
+        }
+        else if (sceneName.Equals("SampleScene"))
+        {
+            transitionAllowed = (currentState == GameState.MenuPrincipal || currentState == GameState.Gameplay);
             targetState = GameState.Gameplay;
         }
 
